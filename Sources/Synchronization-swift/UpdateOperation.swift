@@ -32,7 +32,8 @@ public class UpdateOperation: Operation, AnySynchronizationStatusListener {
     public override func main() {
         super.main()
         do {
-            let rootId = try self.manager.update(for: self.node, listener: self, customPerformer: self.customPerformer)
+            let rootId = try self.manager
+                .update(for: self.node, listener: self, customPerformer: self.customPerformer)
                 .wait()
 
             self.listener?.didSynced(node: self.node.root, id: rootId)

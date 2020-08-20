@@ -93,7 +93,6 @@ public final class SynchronizationManager<Result: AnySyncResult> {
 
         let model = model ?? node.value
 
-
         if model.syncState == .delete, status == .default { // if success deleted no object for seving status
             listener?.didUpdated(status: status, model: model, rootModel: node.root.value)
             return

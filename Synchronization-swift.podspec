@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.name             = 'Synchronization-swift'
   s.version          = `git describe --abbrev=0 --tags`
   s.summary          = 'Synchronization library'
-  s.description      = "Library witch help to create tree structure for synchronization and syncronize data"
+  s.description      = "Library which help to create tree structure for synchronization and syncronize data"
 
   s.homepage         = 'https://github.com/cropio/synchronization-swift'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

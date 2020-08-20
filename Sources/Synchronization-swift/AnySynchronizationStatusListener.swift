@@ -7,6 +7,6 @@
 
 import Foundation
 
-public protocol AnySynchronizationStatusListener: class {
+public protocol AnySynchronizationStatusListener: AnyObject {
     func didUpdated(status: SyncStatus, model: AnySynchronizable, rootModel: AnySynchronizable)
 }

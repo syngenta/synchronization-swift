@@ -7,12 +7,6 @@
 
 import Foundation
 
-public protocol AnySynchronizeOperationListener: class {
-    func statusDidUpdated(status: SyncStatus, model: AnySynchronizable, rootModel: AnySynchronizable)
-    func didSynced(node: SyncNode, id: Int)
-    func didFailed(node: SyncNode, error: Error)
-}
-
 public class SynchronizeOperation: Operation, AnySynchronizationStatusListener {
 
     private let node: SyncNode
@@ -20,8 +14,8 @@ public class SynchronizeOperation: Operation, AnySynchronizationStatusListener {
     private weak var listener: AnySynchronizeOperationListener?
     private weak var customPerformer: AnySynchronizationCustomPerformer?
 
-    public func isEqual(to iddentifier: SyncId) -> Bool {
-        return self.node.value.syncId == iddentifier
+    public func isEqual(to identifier: SyncId) -> Bool {
+        return self.node.value.syncId == identifier
     }
 
     public func isEqual(to node: SyncNode) -> Bool {
@@ -42,7 +36,8 @@ public class SynchronizeOperation: Operation, AnySynchronizationStatusListener {
     public override func main() {
         super.main()
         do {
-            let rootId = try self.manager.synchronize(node: self.node, listener: self, customPerformer: self.customPerformer)
+            let rootId = try self.manager
+                .synchronize(node: self.node, listener: self, customPerformer: self.customPerformer)
                 .wait()
 
             self.listener?.didSynced(node: self.node, id: rootId)
