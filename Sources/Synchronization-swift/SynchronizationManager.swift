@@ -8,24 +8,6 @@
 import Foundation
 import PromiseKit
 
-public enum SynchronizationResolveTypes { // TODO: move
-
-    /// Not resolve and throw error
-    case none
-
-    /// Retry same operation
-    case retry
-
-    /// Retry same operation after delay in seconds
-    case retryAfter(seconds: TimeInterval)
-
-    /// Retry with another URLRequest
-    case retryWith(request: URLRequest)
-
-    /// Reset type will call object request from AnySynchronizable
-    case reset
-}
-
 public final class SynchronizationManager<Result: AnySyncResult> {
 
     private let settings: AnySyncSettings
@@ -72,7 +54,22 @@ public final class SynchronizationManager<Result: AnySyncResult> {
             return result
         } else {
             return self.service.perform(for: request)
-                .map { try Result.from(data: $0.data, request: request, response: $0.response) }
+                .map { result in
+                    let customResult: Result? = try customPerformer?.customResult(
+                        data: result.data,
+                        request: request,
+                        response: result.response,
+                        node: node
+                    )
+                    let result = {
+                        try Result.from(
+                            data: result.data,
+                            request: request,
+                            response: result.response
+                        )
+                    }
+                    return try customResult ?? result()
+                }
                 .recover {
                     tryToResolve ? self.tryToResolve(
                         error: $0,
